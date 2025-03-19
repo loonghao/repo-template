@@ -14,6 +14,7 @@ if ROOT not in sys.path:
 
 # Import third-party modules
 from nox_actions import codetest  # noqa: E402
+from nox_actions import docs  # noqa: E402
 from nox_actions import lint  # noqa: E402
 from nox_actions import release  # noqa: E402
 
@@ -22,3 +23,5 @@ nox.session(lint.lint, name="lint")
 nox.session(lint.lint_fix, name="lint-fix")
 nox.session(codetest.pytest, name="pytest")
 nox.session(release.build_exe, name="build-exe")
+nox.session(docs.docs, name="docs")
+nox.session(docs.docs_serve, name="docs-serve")
