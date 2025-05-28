@@ -42,7 +42,7 @@ python-semantic-release = "^8.5.1"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^7.2.6"
+sphinx = "^8.0.0"
 sphinx-rtd-theme = "^2.0.0"
 myst-parser = "^2.0.0"
 
