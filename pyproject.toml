@@ -53,15 +53,6 @@ Issues = "https://github.com/yourusername/your-project-name/issues"
 [tool.poetry.scripts]
 your-project-name = "your_project_name.cli:main"
 
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.0.1"
-tag_format = "$version"
-version_files = [
-    "pyproject.toml:version",
-    "src/your_project_name/__version__.py",
-]
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
