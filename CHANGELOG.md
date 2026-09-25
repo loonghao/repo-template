@@ -2,6 +2,18 @@
 
 
 
+## [0.1.0](https://github.com/loonghao/repo-template/compare/v0.0.1...v0.1.0) (2026-09-25)
+
+
+### Features
+
+* enhance release workflow with trusted publishing ([0a3e996](https://github.com/loonghao/repo-template/commit/0a3e9962171c610255c9492d3c3f678c7e21686c))
+
+
+### Bug Fixes
+
+* **ci:** fall back to GITHUB_TOKEN for release-please ([d1d3a7e](https://github.com/loonghao/repo-template/commit/d1d3a7e6de9658e6d518549ad08dd2df3f63129f))
+
 ## v0.1.0 (2025-03-19)
 
 ### Chore
