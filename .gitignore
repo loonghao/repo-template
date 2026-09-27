@@ -12,6 +12,7 @@ build/
 .coverage
 .coverage.*
 coverage.xml
+coverage.json
 htmlcov/
 .pytest_cache/
 
@@ -45,5 +46,45 @@ poetry.lock
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# macOS
+# macOS / Windows shell noise
 .DS_Store
+Thumbs.db
+
+# --- Repository contract -------------------------------------------------
+# Everything below is listed in contract/repo_contract.json under
+# `forbidden_artifact_globs` or `root_deny_globs`. The dcc-mcp contract gate
+# (rule R001) fails the build if any of these is committed at the repository
+# root, so keep them ignored.
+
+# Compiled objects and shared libraries
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.pyd
+*.a
+*.lib
+*.rcgu.o
+*.exe
+*.class
+
+# Profiling and instrumentation output
+*.profraw
+*.profdata
+
+# One-off tool output
+audit-result.json
+performance_results.json
+clippy_check.txt
+commit_msg.txt
+*.log
+*.tmp
+
+# Merge and patch leftovers
+*.orig
+*.rej
+*.patch
+*.diff
+*.bak
+*.old

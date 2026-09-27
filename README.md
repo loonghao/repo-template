@@ -15,6 +15,33 @@
 
 Your project description
 
+## From this template to a working repository
+
+Three steps. Everything below is already wired up; you are renaming, not building.
+
+1. **Create the repository and name the package.**
+   Click **Use this template**, or run
+   `python scripts/apply_template.py ../my-new-repo --name my-new-repo` to drop
+   the same contract files into a repository that already exists. Then rename
+   `src/your_project_name/` to `src/<your_package>/` and replace
+   `your-project-name` / `yourusername` in `pyproject.toml` and this README.
+
+2. **Pin the toolchain and install.**
+   Edit `[tools]` in `vx.toml` to the versions your project actually needs, then
+   run `just install`. Recipes live in the `justfile`: `just lint`, `just test`,
+   `just docs`, `just ci`.
+
+3. **Let the contract gate watch the repository.**
+   `.github/workflows/repo-contract.yml` runs the
+   [`dcc-mcp` repository contract](https://github.com/dcc-mcp/.github/blob/main/docs/repo-contract.md)
+   on every pull request: no build artifacts at the root, a lowercase `justfile`,
+   an `AGENTS.md`, resolvable `vx.toml` pins, and a root directory limited to the
+   allowlist. It passes as-is — check locally with:
+
+   ```bash
+   python <dcc-mcp/.github>/scripts/check_repo_contract.py --root . --profile strict
+   ```
+
 ## Features
 
 - Feature 1
@@ -57,25 +84,36 @@ poetry install
 ### Testing
 
 ```bash
-# Run tests with nox
+# Everything through the justfile; nox runs underneath
+just lint        # ruff + mypy
+just lint-fix    # apply the automatic fixes
+just test        # pytest with coverage
+just ci          # lint + test, the pair CI runs
+
+# Or call nox directly
 nox -s pytest
-
-# Run linting
 nox -s lint
-
-# Fix linting issues
-nox -s lint_fix
+nox -s lint-fix
 ```
 
 ### Documentation
 
 ```bash
-# Build documentation
-nox -s docs
-
-# Serve documentation with live reloading
-nox -s docs-serve
+just docs         # build the Sphinx documentation
+just docs-serve   # serve it with live reloading
 ```
+
+### Repository contract
+
+```bash
+# Check this repository against the dcc-mcp contract
+python <dcc-mcp/.github>/scripts/check_repo_contract.py --root . --profile strict
+```
+
+`AGENTS.md` is the single source of truth for coding-agent instructions;
+`CLAUDE.md`, `GEMINI.md`, `CURSOR.md` and the rest are symlinks to it. Lint
+configuration lives in `pyproject.toml` — there is no `.flake8`, `.pylintrc`, or
+`.coveragerc`, and adding one back would fail the contract gate.
 
 ## License
 

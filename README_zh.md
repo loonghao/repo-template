@@ -15,6 +15,31 @@
 
 项目描述
 
+## 从模板到可用仓库：三步
+
+下面三步都是改名字，不需要从零搭建。
+
+1. **建仓并命名包。**
+   点击 **Use this template**，或执行
+   `python scripts/apply_template.py ../my-new-repo --name my-new-repo`
+   把同一套契约文件套到已存在的仓库。然后把 `src/your_project_name/`
+   改名为 `src/<your_package>/`，并替换 `pyproject.toml` 和本文件中的
+   `your-project-name` / `yourusername`。
+
+2. **锁定工具链并安装。**
+   按项目需要修改 `vx.toml` 的 `[tools]`，然后执行 `just install`。
+   所有任务入口都在 `justfile`：`just lint`、`just test`、`just docs`、`just ci`。
+
+3. **让契约门禁接管检查。**
+   `.github/workflows/repo-contract.yml` 会在每个 PR 上跑
+   [`dcc-mcp` 仓库契约](https://github.com/dcc-mcp/.github/blob/main/docs/repo-contract.md)：
+   根目录无构建产物、`justfile` 全小写、存在 `AGENTS.md`、`vx.toml` 版本可解析、
+   根目录条目在白名单内。模板开箱即通过；本地自检：
+
+   ```bash
+   python <dcc-mcp/.github>/scripts/check_repo_contract.py --root . --profile strict
+   ```
+
 ## 特性
 
 - 特性 1
@@ -57,25 +82,35 @@ poetry install
 ### 测试
 
 ```bash
-# 使用 nox 运行测试
+# 统一从 justfile 进入，底层仍是 nox
+just lint        # ruff + mypy
+just lint-fix    # 自动修复
+just test        # pytest 带覆盖率
+just ci          # lint + test，与 CI 一致
+
+# 也可以直接调用 nox
 nox -s pytest
-
-# 运行代码检查
 nox -s lint
-
-# 修复代码风格问题
-nox -s lint_fix
+nox -s lint-fix
 ```
 
 ### 文档
 
 ```bash
-# 构建文档
-nox -s docs
-
-# 启动带有实时重载功能的文档服务器
-nox -s docs-serve
+just docs         # 构建 Sphinx 文档
+just docs-serve   # 带实时重载本地预览
 ```
+
+### 仓库契约
+
+```bash
+# 对当前仓库跑 dcc-mcp 仓库契约
+python <dcc-mcp/.github>/scripts/check_repo_contract.py --root . --profile strict
+```
+
+`AGENTS.md` 是编码 Agent 指令的唯一真源；`CLAUDE.md`、`GEMINI.md`、`CURSOR.md`
+等都是指向它的 symlink。lint 配置统一放在 `pyproject.toml`，仓库里没有
+`.flake8`、`.pylintrc`、`.coveragerc`，加回来会被契约门禁拦下。
 
 ## 许可证
 

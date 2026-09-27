@@ -1,0 +1,11 @@
+# Toolchain pins only.
+#
+# Tasks live in the justfile, so there is deliberately no [scripts] table here:
+# duplicating every recipe in two places is how the two copies drift apart.
+# See the dcc-mcp repository contract, rule R007.
+
+[tools]
+just = "latest"
+node = "22"
+python = "3.12"
+uv = "latest"
