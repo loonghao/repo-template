@@ -1,0 +1,25 @@
+name: Repo contract
+
+# Checks this repository against the dcc-mcp repository contract: no build
+# artifacts at the root, a lowercase justfile, AGENTS.md present, vx.toml pins
+# resolvable, and a root directory limited to the allowlist.
+#
+# `nox_actions/` and `requirements-dev.txt` are template-specific: the nox
+# sessions import the former and .github/workflows/codecov.yml installs the
+# latter, so both are declared as known exceptions rather than moved.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    uses: dcc-mcp/.github/.github/workflows/repo-contract.yml@main
+    with:
+      profile: strict
+      allow-extra: "nox_actions,requirements-dev.txt"
+      fail-on: warning
