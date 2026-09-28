@@ -35,17 +35,27 @@ pydantic = [
     { version = ">=1.10.0,<2.0.0", markers = "python_version >= '3.8'" },
 ]
 
+# Note on the dev group: `commitizen` and `python-semantic-release` declare
+# Python >=3.8 and >=3.7 respectively, but their own trees no longer hold those
+# floors - commitizen reaches markupsafe (3.x needs >=3.9) via jinja2, and
+# python-semantic-release reaches requests and rich (both now >=3.9). Poetry
+# 1.x resolves those transitive requirements against the whole declared range
+# instead of the narrower window, so both tools are gated at 3.9+, where the
+# rest of the toolchain already sits.
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
-# commitizen >=3.10.0 requires Python >=3.8, so it must stay out of the 3.7
-# solve. Markers, not `python`, for the poetry 1.x reason given above.
-commitizen = { version = "^3.12.0", markers = "python_version >= '3.8'" }
+# Transitive pin: pytest pulls in importlib-metadata, which pulls in zipp.
+# 3.16+ requires Python >=3.8, and poetry 1.x will not backtrack to an older
+# release on its own.
+zipp = { version = "<3.16", markers = "python_version < '3.8'" }
+commitizen = { version = "^3.12.0", markers = "python_version >= '3.9'" }
 ruff = "^0.9.0"
 pyfakefs = "^5.8.0"
 # 8.1.0+ requires pydantic>=2, which conflicts with the pydantic<2 runtime pin
 # this template ships with. 8.0.x is the last line that accepts pydantic <2,>=1.10.2.
-python-semantic-release = ">=8.0.0,<8.1.0"
+python-semantic-release = { version = ">=8.0.0,<8.1.0", markers = "python_version >= '3.9'" }
 
 [tool.poetry.group.docs]
 optional = true
@@ -61,10 +71,6 @@ optional = true
 sphinx = { version = "^7.2.6", markers = "python_version >= '3.9'" }
 sphinx-rtd-theme = { version = "^2.0.0", markers = "python_version >= '3.9'" }
 myst-parser = { version = "^2.0.0", markers = "python_version >= '3.9'" }
-# Declared explicitly because poetry 1.x otherwise still resolves
-# markdown-it-py (pulled in by myst-parser and requiring Python >=3.8)
-# against the full >=3.7 range and fails the 3.7/3.8 legs.
-markdown-it-py = { version = ">=3.0,<4.0", markers = "python_version >= '3.9'" }
 
 [tool.poetry.urls]
 Homepage = "https://github.com/yourusername/your-project-name"
