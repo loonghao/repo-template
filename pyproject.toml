@@ -44,7 +44,7 @@ pydantic = [
 # rest of the toolchain already sits.
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
+pytest = "^9.0.0"
 pytest-cov = "^4.1.0"
 # Transitive pin: pytest pulls in importlib-metadata, which pulls in zipp.
 # 3.16+ requires Python >=3.8, and poetry 1.x will not backtrack to an older
