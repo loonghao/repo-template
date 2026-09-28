@@ -9,7 +9,8 @@ from your_project_name.cli import main
 
 def test_main_returns_zero():
     """Test that the main function returns zero."""
-    result = main(["--help"])
+    # --help makes argparse raise SystemExit, so it never reaches the return.
+    result = main([])
     assert result == 0
 
 
