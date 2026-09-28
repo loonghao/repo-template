@@ -28,23 +28,36 @@ classifiers = [
 python = ">=3.7,<4.0"
 loguru = ">=0.7.3,<0.8.0"
 platformdirs = ">=3,<4.0.0"
-pydantic = ">=1.10.0,<2.0.0"
+# 1.10.25 dropped the cp37 wheels, so pin the 3.7 branch to the last release that
+# still ships one and keep the rest of the range on the newest 1.10.x.
+pydantic = [
+    { version = ">=1.10.0,<1.10.25", python = ">=3.7,<3.8" },
+    { version = ">=1.10.0,<2.0.0", python = ">=3.8,<4.0" },
+]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
-commitizen = "^3.12.0"
+# commitizen >=3.10.0 requires Python >=3.8, so it must stay out of the 3.7 solve.
+commitizen = { version = "^3.12.0", python = ">=3.8,<4.0" }
 ruff = "^0.9.0"
 pyfakefs = "^5.8.0"
-python-semantic-release = "^8.5.1"
+# 8.1.0+ requires pydantic>=2, which conflicts with the pydantic<2 runtime pin
+# this template ships with. 8.0.x is the last line that accepts pydantic <2,>=1.10.2.
+python-semantic-release = ">=8.0.0,<8.1.0"
 
 [tool.poetry.group.docs]
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
-myst-parser = "^2.0.0"
+# sphinx >=7.2.6 requires Python >=3.9, so it must stay out of the 3.7/3.8 solve.
+sphinx = { version = "^7.2.6", python = ">=3.9,<4.0" }
+# Depends on sphinx unconditionally, so it inherits sphinx's Python >=3.9 floor.
+sphinx-rtd-theme = { version = "^2.0.0", python = ">=3.9,<4.0" }
+# myst-parser >=2.0.0 declares Python >=3.8, but it depends on sphinx<8,>=6 and
+# this project pins sphinx ^7.2.6, which requires Python >=3.9. The docs stack
+# therefore shares sphinx's >=3.9 floor for the whole declared range.
+myst-parser = { version = "^2.0.0", python = ">=3.9,<4.0" }
 
 [tool.poetry.urls]
 Homepage = "https://github.com/yourusername/your-project-name"
