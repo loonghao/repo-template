@@ -13,7 +13,6 @@ unless ``--force`` is passed, and ``--dry-run`` prints the plan first.
 Usage:
     python scripts/apply_template.py --dry-run ../some-other-repo
     python scripts/apply_template.py ../some-other-repo
-    python scripts/apply_template.py ../new-thing --name new-thing
 
 Exit codes:
     0 - the template was applied (or the dry run was clean)
@@ -43,16 +42,19 @@ COPY_FILES = (
 # Per-tool agent files that must point at AGENTS.md (contract rule R008).
 DERIVED_AGENT_FILES = ("CLAUDE.md", "GEMINI.md", "CURSOR.md", "COPILOT.md", "CODEBUDDY.md")
 
-PLACEHOLDERS = ("your-project-name", "your_project_name", "your_project_name_placeholder")
+# Only the patterns under this banner in the template's .gitignore are propagated.
+# Everything above it is the template's own housekeeping (poetry.lock, dist/,
+# .venv/ ...), which an adopting repository decides for itself.
+CONTRACT_SECTION_BANNER = "# --- Repository contract ---"
 
 
-def derive_name(target: Path, explicit: str | None) -> tuple[str, str]:
-    """Return the (dashed, underscored) forms of the project name."""
-    raw = explicit or target.resolve().name
+def derive_name(target: Path) -> tuple[str, str]:
+    """Return the (dashed, underscored) forms of the target's project name."""
+    raw = target.resolve().name
     dashed = re.sub(r"[_\s]+", "-", raw).strip("-").lower()
     underscored = dashed.replace("-", "_")
     if not underscored or not underscored.isidentifier():
-        raise SystemExit(f"cannot derive a package name from {raw!r}; pass --name")
+        raise ValueError(f"cannot derive a package name from {raw!r}")
     return dashed, underscored
 
 
@@ -61,16 +63,30 @@ def substitute(text: str, dashed: str, underscored: str) -> str:
     return text.replace("your-project-name", dashed).replace("your_project_name", underscored)
 
 
+def contract_patterns(template_gitignore: Path) -> list[str]:
+    """Return the artifact patterns listed below the contract banner."""
+    lines = template_gitignore.read_text(encoding="utf-8").splitlines()
+    start = None
+    for index, line in enumerate(lines):
+        if line.startswith(CONTRACT_SECTION_BANNER):
+            start = index
+            break
+    if start is None:
+        return []
+    patterns = []
+    for line in lines[start + 1 :]:
+        stripped = line.strip()
+        if stripped and not stripped.startswith("#"):
+            patterns.append(line)
+    return patterns
+
+
 def merge_gitignore(target: Path, template: Path, dry_run: bool) -> list[str]:
-    """Append the template's ignore patterns that the target does not have yet."""
+    """Append the contract's artifact patterns that the target does not have yet."""
     destination = target / ".gitignore"
     existing = destination.read_text(encoding="utf-8") if destination.is_file() else ""
     have = {line.strip() for line in existing.splitlines()}
-    missing = [
-        line
-        for line in template.read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.startswith("#") and line.strip() not in have
-    ]
+    missing = [line for line in contract_patterns(template) if line.strip() not in have]
     if not missing:
         return []
     if dry_run:
@@ -122,10 +138,6 @@ def main(argv: list[str] | None = None) -> int:
         help=f"template root (default: {TEMPLATE_ROOT})",
     )
     parser.add_argument(
-        "--name",
-        help="project name; defaults to the target directory name",
-    )
-    parser.add_argument(
         "--dry-run", action="store_true", help="print the plan and change nothing"
     )
     parser.add_argument(
@@ -145,9 +157,15 @@ def main(argv: list[str] | None = None) -> int:
         print("error: the target must not be the template itself", file=sys.stderr)
         return 2
 
-    dashed, underscored = derive_name(target, args.name)
+    try:
+        dashed, underscored = derive_name(target)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
     actions: list[str] = []
     conflicts: list[str] = []
+    pending: list[tuple[Path, Path]] = []
 
     for relative in COPY_FILES:
         source = template / relative
@@ -159,26 +177,30 @@ def main(argv: list[str] | None = None) -> int:
             conflicts.append(f"{relative}: already exists (use --force to overwrite)")
             continue
         actions.append(f"{'overwrite' if destination.exists() else 'write'} {relative}")
-        if args.dry_run:
-            continue
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(
-            substitute(source.read_text(encoding="utf-8"), dashed, underscored),
-            encoding="utf-8",
-        )
+        pending.append((source, destination))
 
-    gitignore_actions = merge_gitignore(target, template / ".gitignore", args.dry_run)
-    actions.extend(gitignore_actions)
+    # Resolve every conflict before touching the target. Exiting 1 has to mean
+    # that nothing happened, otherwise a later --force run silently builds on
+    # half-applied changes the user never saw.
+    if conflicts:
+        for conflict in conflicts:
+            print(f"skip  {conflict}", file=sys.stderr)
+        return 1
+
+    if not args.dry_run:
+        for source, destination in pending:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(
+                substitute(source.read_text(encoding="utf-8"), dashed, underscored),
+                encoding="utf-8",
+            )
+
+    actions.extend(merge_gitignore(target, template / ".gitignore", args.dry_run))
     actions.extend(link_derived_agent_files(target, args.dry_run))
 
     prefix = "would " if args.dry_run else ""
     for action in actions:
         print(f"{prefix}{action}")
-    for conflict in conflicts:
-        print(f"skip  {conflict}", file=sys.stderr)
-
-    if conflicts:
-        return 1
 
     if args.dry_run:
         print("\ndry run: nothing was changed")
