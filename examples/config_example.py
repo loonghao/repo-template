@@ -20,7 +20,7 @@ def main():
     # Load example config
     config_path = os.path.join(os.path.dirname(__file__), 'config.json')
     
-    with open(config_path, 'r') as f:
+    with open(config_path) as f:
         example_config = json.load(f)
     
     print("Example configuration:")

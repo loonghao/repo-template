@@ -1,5 +1,5 @@
-# Configuration file for the Sphinx documentation builder.
-#
+"""Configuration file for the Sphinx documentation builder."""
+
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
@@ -25,8 +25,9 @@ copyright = f'{datetime.datetime.now().year}, Your Name'
 author = 'Your Name'
 
 # Import local modules
-# The full version, including alpha/beta/rc tags
-from your_project_name.__version__ import __version__
+# The full version, including alpha/beta/rc tags.
+# Imported after the sys.path setup above, hence the E402 suppression.
+from your_project_name.__version__ import __version__  # noqa: E402
 
 release = __version__
 version = '.'.join(release.split('.')[:2])

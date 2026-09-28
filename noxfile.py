@@ -12,10 +12,10 @@ if ROOT not in sys.path:
     sys.path.append(ROOT)
 
 # Import local modules
-from nox_actions import codetest  # noqa: E402
-from nox_actions import docs  # noqa: E402
-from nox_actions import lint  # noqa: E402
-from nox_actions import release  # noqa: E402
+from nox_actions import codetest
+from nox_actions import docs
+from nox_actions import lint
+from nox_actions import release
 
 nox.session(lint.lint, name="lint")
 nox.session(lint.lint_fix, name="lint-fix")

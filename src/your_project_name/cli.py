@@ -18,6 +18,7 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
         
     Returns:
         Parsed arguments.
+
     """
     parser = argparse.ArgumentParser(
         description="Your project description",
@@ -41,13 +42,14 @@ def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
 
 
 def main(args: Optional[List[str]] = None) -> int:
-    """Main entry point for the application.
+    """Run the command-line entry point.
     
     Args:
         args: Command line arguments. If None, uses sys.argv.
         
     Returns:
         Exit code.
+
     """
     parsed_args = parse_args(args)
     

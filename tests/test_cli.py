@@ -15,7 +15,7 @@ def test_main_returns_zero():
 
 def test_version_flag():
     """Test that the version flag works."""
-    with mock.patch("sys.stdout") as mock_stdout:
+    with mock.patch("sys.stdout"):
         with mock.patch("sys.exit") as mock_exit:
             main(["--version"])
             mock_exit.assert_called_once()
