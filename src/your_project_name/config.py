@@ -1,8 +1,11 @@
 """Configuration handling for the project."""
 
 # Import built-in modules
+import json
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Dict
+from typing import Optional
+from typing import Union
 
 # Import third-party modules
 from platformdirs import user_config_dir
@@ -26,9 +29,8 @@ def get_config(config_path: Optional[Union[str, Path]] = None) -> Dict:
         
     Returns:
         Configuration dictionary.
+
     """
-    import json
-    
     if config_path is None:
         config_path = DEFAULT_CONFIG_PATH
     else:
@@ -37,7 +39,7 @@ def get_config(config_path: Optional[Union[str, Path]] = None) -> Dict:
     if not config_path.exists():
         return {}
     
-    with open(config_path, "r") as f:
+    with open(config_path) as f:
         return json.load(f)
 
 
@@ -47,9 +49,8 @@ def save_config(config: Dict, config_path: Optional[Union[str, Path]] = None) ->
     Args:
         config: Configuration dictionary to save.
         config_path: Path to save configuration to. If None, uses default path.
+
     """
-    import json
-    
     if config_path is None:
         config_path = DEFAULT_CONFIG_PATH
     else:

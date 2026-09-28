@@ -1,10 +1,13 @@
-# Configuration file for the Sphinx documentation builder.
-#
+"""Configuration file for the Sphinx documentation builder."""
+
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
+
+# Import built-in modules
+import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -12,7 +15,6 @@
 #
 import os
 import sys
-import datetime
 
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -22,8 +24,11 @@ project = 'your-project-name'
 copyright = f'{datetime.datetime.now().year}, Your Name'
 author = 'Your Name'
 
-# The full version, including alpha/beta/rc tags
-from your_project_name.__version__ import __version__
+# Import local modules
+# The full version, including alpha/beta/rc tags.
+# Imported after the sys.path setup above, hence the E402 suppression.
+from your_project_name.__version__ import __version__  # noqa: E402
+
 release = __version__
 version = '.'.join(release.split('.')[:2])
 

@@ -1,11 +1,12 @@
 # Import third-party modules
 import nox
-from nox_actions.utils import PACKAGE_NAME
 
 
 def lint(session: nox.Session) -> None:
     session.install("isort", "ruff")
-    session.run("isort", "--check-only", PACKAGE_NAME)
+    # The package lives under src/, so passing its name as a path never
+    # resolved. Check the repository root instead, matching `lint-fix`.
+    session.run("isort", "--check-only", ".")
     session.run("ruff", "check")
 
 

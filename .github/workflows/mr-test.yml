@@ -8,11 +8,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        # Python 3.7 is no longer published for the ubuntu-24.04 image that
+        # ubuntu-latest now resolves to, so the 3.7 leg runs on 22.04.
         include:
           - os: ubuntu-latest
             python-version: "3.7"
+            runner: ubuntu-22.04
       fail-fast: false
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner || matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
