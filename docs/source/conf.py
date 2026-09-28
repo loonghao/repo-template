@@ -6,13 +6,15 @@
 
 # -- Path setup --------------------------------------------------------------
 
+# Import built-in modules
+import datetime
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
 import sys
-import datetime
 
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -22,8 +24,10 @@ project = 'your-project-name'
 copyright = f'{datetime.datetime.now().year}, Your Name'
 author = 'Your Name'
 
+# Import local modules
 # The full version, including alpha/beta/rc tags
 from your_project_name.__version__ import __version__
+
 release = __version__
 version = '.'.join(release.split('.')[:2])
 

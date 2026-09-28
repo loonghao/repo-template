@@ -2,14 +2,15 @@
 
 # Import built-in modules
 import os
-import shutil
 from pathlib import Path
+import shutil
 
 # Import third-party modules
 import nox
 
 # Import local modules
-from nox_actions.utils import PACKAGE_NAME, THIS_ROOT
+from nox_actions.utils import PACKAGE_NAME
+from nox_actions.utils import THIS_ROOT
 
 
 @nox.session

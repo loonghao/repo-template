@@ -136,6 +136,7 @@ import_heading_future = "Import future modules"
 import_heading_stdlib = "Import built-in modules"
 import_heading_thirdparty = "Import third-party modules"
 import_heading_firstparty = "Import local modules"
+import_heading_localfolder = "Import local modules"
 
 profile = "black"
 line_length = 120

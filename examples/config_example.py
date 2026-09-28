@@ -9,8 +9,10 @@ import sys
 # Add the parent directory to sys.path to import the package
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# Import local modules
 # Import the package
-from your_project_name.config import get_config, save_config
+from your_project_name.config import get_config
+from your_project_name.config import save_config
 
 
 def main():

@@ -1,7 +1,6 @@
 # Import built-in modules
 from pathlib import Path
 
-
 PACKAGE_NAME = "your_project_name"
 THIS_ROOT = Path(__file__).parent.parent
 PROJECT_ROOT = THIS_ROOT.parent

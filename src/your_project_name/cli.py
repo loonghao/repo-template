@@ -3,7 +3,8 @@
 # Import built-in modules
 import argparse
 import sys
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 # Import local modules
 from .__version__ import __version__

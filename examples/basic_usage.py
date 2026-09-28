@@ -2,12 +2,13 @@
 """Basic usage example for your-project-name."""
 
 # Import built-in modules
-import sys
 import os
+import sys
 
 # Add the parent directory to sys.path to import the package
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# Import local modules
 # Import the package
 from your_project_name import __version__
 
