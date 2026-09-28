@@ -21,7 +21,7 @@
 
 1. **建仓并命名包。**
    点击 **Use this template**，或执行
-   `python scripts/apply_template.py ../my-new-repo --name my-new-repo`
+   `python scripts/apply_template.py ../my-new-repo`
    把同一套契约文件套到已存在的仓库。然后把 `src/your_project_name/`
    改名为 `src/<your_package>/`，并替换 `pyproject.toml` 和本文件中的
    `your-project-name` / `yourusername`。

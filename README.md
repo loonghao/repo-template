@@ -21,7 +21,7 @@ Three steps. Everything below is already wired up; you are renaming, not buildin
 
 1. **Create the repository and name the package.**
    Click **Use this template**, or run
-   `python scripts/apply_template.py ../my-new-repo --name my-new-repo` to drop
+   `python scripts/apply_template.py ../my-new-repo` to drop
    the same contract files into a repository that already exists. Then rename
    `src/your_project_name/` to `src/<your_package>/` and replace
    `your-project-name` / `yourusername` in `pyproject.toml` and this README.
