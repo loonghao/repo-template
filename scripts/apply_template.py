@@ -21,12 +21,14 @@ Exit codes:
     2 - the arguments or paths are unusable
 """
 
+# Import future modules
 from __future__ import annotations
 
+# Import built-in modules
 import argparse
+from pathlib import Path
 import re
 import sys
-from pathlib import Path
 
 TEMPLATE_ROOT = Path(__file__).resolve().parents[1]
 
@@ -55,6 +57,7 @@ def derive_name(target: Path, explicit: str | None) -> tuple[str, str]:
 
 
 def substitute(text: str, dashed: str, underscored: str) -> str:
+    """Replace the template's placeholders with the target project's names."""
     return text.replace("your-project-name", dashed).replace("your_project_name", underscored)
 
 
@@ -108,6 +111,7 @@ def link_derived_agent_files(target: Path, dry_run: bool) -> list[str]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Apply the contract files to a target repository."""
     parser = argparse.ArgumentParser(
         description="Apply the contract files from loonghao/repo-template to a repository."
     )
