@@ -56,7 +56,7 @@ pytest-cov = "^4.1.0"
 zipp = { version = "<3.16", markers = "python_version < '3.8'" }
 commitizen = { version = "^4.0.0", markers = "python_version >= '3.10'" }
 ruff = "^0.9.0"
-pyfakefs = "^5.8.0"
+pyfakefs = "^6.0.0"
 # 8.1.0+ requires pydantic>=2, which conflicts with the pydantic<2 runtime pin
 # this template ships with. 8.0.x is the last line that accepts pydantic <2,>=1.10.2.
 python-semantic-release = { version = ">=8.0.0,<8.1.0", markers = "python_version >= '3.9'" }
