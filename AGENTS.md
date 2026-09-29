@@ -28,6 +28,11 @@ just docs        # build the Sphinx docs
 just ci          # lint + test, the same pair CI runs
 ```
 
+`requirements-dev.txt` is a pip-side convenience file: its only CI consumer is
+the Codecov workflow, which pins Python 3.10. Its own floor is Python 3.9
+(`pytest-cov>=6.0.0`), not the `python = ">=3.7,<4.0"` the package declares --
+do not read it as the supported interpreter range.
+
 `nox` is the engine behind the quality sessions; the `justfile` is the entry
 point so there is one command to remember.
 
