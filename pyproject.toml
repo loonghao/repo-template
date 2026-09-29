@@ -35,13 +35,17 @@ pydantic = [
     { version = ">=1.10.0,<2.0.0", markers = "python_version >= '3.8'" },
 ]
 
-# Note on the dev group: `commitizen` and `python-semantic-release` declare
-# Python >=3.8 and >=3.7 respectively, but their own trees no longer hold those
-# floors - commitizen reaches markupsafe (3.x needs >=3.9) via jinja2, and
-# python-semantic-release reaches requests and rich (both now >=3.9). Poetry
-# 1.x resolves those transitive requirements against the whole declared range
-# instead of the narrower window, so both tools are gated at 3.9+, where the
-# rest of the toolchain already sits.
+# Note on the dev group: a marker must state the floor this project can actually
+# resolve, not the floor the package declares on PyPI. Poetry 1.x does not narrow
+# a direct dependency's transitive requirements to that dependency's marker - it
+# evaluates them against the whole `python = ">=3.7,<4.0"` range.
+#
+# - commitizen 4.x sits at 3.10. 4.0.0-4.10.1 requests `importlib-metadata>=8.0.0`
+#   under `python_version < "3.10"`, and importlib-metadata 8.x requires Python
+#   >=3.8, so the 3.7 leg of the range forbids the whole 8.x line; 4.11.0+ asks
+#   for Python >=3.10 on its own. Both halves of `^4.0.0` are blocked below 3.10.
+# - python-semantic-release reaches requests and rich (both now >=3.9), so it
+#   stays at 3.9+, where the rest of the toolchain already sits.
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
@@ -50,7 +54,7 @@ pytest-cov = "^4.1.0"
 # 3.16+ requires Python >=3.8, and poetry 1.x will not backtrack to an older
 # release on its own.
 zipp = { version = "<3.16", markers = "python_version < '3.8'" }
-commitizen = { version = "^4.0.0", markers = "python_version >= '3.9'" }
+commitizen = { version = "^4.0.0", markers = "python_version >= '3.10'" }
 ruff = "^0.9.0"
 pyfakefs = "^5.8.0"
 # 8.1.0+ requires pydantic>=2, which conflicts with the pydantic<2 runtime pin
