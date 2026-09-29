@@ -2,5 +2,14 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "python-semantic-release 8.1.0+ depends on pydantic>=2, which the pydantic<2 runtime pin in pyproject.toml cannot satisfy, so poetry's resolver rejects the whole update. Stay on the 8.0.x line until this template migrates to pydantic v2.",
+      "matchPackageNames": [
+        "python-semantic-release"
+      ],
+      "allowedVersions": ">=8.0.0,<8.1.0"
+    }
   ]
 }

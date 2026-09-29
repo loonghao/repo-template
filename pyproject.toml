@@ -59,6 +59,8 @@ ruff = "^0.9.0"
 pyfakefs = "^5.8.0"
 # 8.1.0+ requires pydantic>=2, which conflicts with the pydantic<2 runtime pin
 # this template ships with. 8.0.x is the last line that accepts pydantic <2,>=1.10.2.
+# The ceiling is enforced twice on purpose: renovate.json caps this dependency
+# with allowedVersions, so the bot stops re-opening the same unresolvable bump.
 python-semantic-release = { version = ">=8.0.0,<8.1.0", markers = "python_version >= '3.9'" }
 
 [tool.poetry.group.docs]
