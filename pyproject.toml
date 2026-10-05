@@ -27,7 +27,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0"
 loguru = ">=0.7.3,<0.8.0"
-platformdirs = ">=3,<4.0.0"
+platformdirs = ">=4.0.0,<5.0.0"
 # 1.10.25 dropped the cp37 wheels, so pin the 3.7 branch to the last release that
 # still ships one and keep the rest of the range on the newest 1.10.x.
 pydantic = [
