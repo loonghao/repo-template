@@ -76,7 +76,7 @@ optional = true
 # >=3.9 floor rather than myst-parser's own >=3.8.
 sphinx = { version = "^7.2.6", markers = "python_version >= '3.9'" }
 sphinx-rtd-theme = { version = "^2.0.0", markers = "python_version >= '3.9'" }
-myst-parser = { version = "^2.0.0", markers = "python_version >= '3.9'" }
+myst-parser = { version = "^3.0.1", markers = "python_version >= '3.9'" }
 
 [tool.poetry.urls]
 Homepage = "https://github.com/yourusername/your-project-name"
